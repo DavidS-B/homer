@@ -39,13 +39,31 @@ $ iex -S mix phx.server
 ```
 $ mix test
 ```
-
-## Access to the application
-
 ### Endpoint access to create an offer request:
 ```
 http://localhost:4000/offer_requests
 ```
+
+## Running this app with Docker
+
+### Install Docker Compose:
+https://docs.docker.com/compose/install/
+
+### Build everything:
+```shell
+$ sudo chmod +x entrypoint.sh
+$ docker-compose build
+```
+
+### Start the app:
+```shell
+$ docker-compose up
+```
+### Endpoint access to create an offer request:
+```
+http://localhost:8080/offer_requests
+```
+
 ## Questions
 
 1) Given than in production we can have more than 5000 offers for one offer request. What persistence strategy do you suggest for offers ? Explain why.

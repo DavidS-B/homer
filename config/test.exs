@@ -9,7 +9,7 @@ config :homer, Homer.Repo,
   username: "postgres",
   password: "postgres",
   database: "homer_test#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: "localhost",
+  hostname: "db",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
