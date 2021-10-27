@@ -32,7 +32,7 @@
     <%= error_tag f, :allowed_airlines %>
   
     <div>
-      <%= submit "Save", phx_disable_with: "Saving..." %>
+      <%= submit "Save", phx_disable_with: "Saving...", disabled: @disabled %>
     </div>
   </.form>
 </div>

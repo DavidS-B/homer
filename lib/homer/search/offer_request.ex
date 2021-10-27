@@ -1,5 +1,6 @@
 defmodule Homer.Search.OfferRequest do
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "offer_requests" do
@@ -16,7 +17,7 @@ defmodule Homer.Search.OfferRequest do
   @doc false
   def changeset(offer_request, attrs) do
     offer_request
-    |> cast(attrs, @required ++ [:sort_by, :allowed_airlines])
+    |> cast(attrs, [:sort_by, :allowed_airlines] ++ @required)
     |> validate_required(@required)
     |> validate_iata(:destination)
     |> validate_iata(:origin)

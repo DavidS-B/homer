@@ -48,7 +48,11 @@ defmodule Homer.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:httpoison, "~> 1.8"},
+      {:flow, "~> 1.0"},
+      {:jaxon, "~> 2.0"},
+      {:timex, "~> 3.0"}
     ]
   end
 

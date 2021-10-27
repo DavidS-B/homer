@@ -16,19 +16,19 @@ defmodule HomerWeb.OfferRequestLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Offer request")
+    |> assign(:page_title, "Edit offer request")
     |> assign(:offer_request, Search.get_offer_request!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Offer request")
+    |> assign(:page_title, "New offer request")
     |> assign(:offer_request, %OfferRequest{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Offer requests")
+    |> assign(:page_title, "Listing offer requests")
     |> assign(:offer_request, nil)
   end
 

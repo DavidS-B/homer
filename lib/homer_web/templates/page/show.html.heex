@@ -1,4 +1,6 @@
-<h1>Show Offer request</h1>
+<% alias Homer.Utils.DTUtils %>
+
+<h1>Show offers</h1>
 
 <%= if @live_action in [:edit] do %>
   <%= live_modal HomerWeb.OfferRequestLive.EditComponent,
@@ -10,33 +12,56 @@
 <% end %>
 
 <ul>
-
   <li>
     <strong>Origin:</strong>
     <%= @offer_request.origin %>
   </li>
-
   <li>
     <strong>Destination:</strong>
     <%= @offer_request.destination %>
   </li>
-
   <li>
     <strong>Departure date:</strong>
     <%= @offer_request.departure_date %>
   </li>
-
   <li>
     <strong>Sort by:</strong>
     <%= @offer_request.sort_by %>
   </li>
-
   <li>
     <strong>Allowed airlines:</strong>
     <%= Enum.intersperse(@offer_request.allowed_airlines, " | ") %>
   </li>
-
 </ul>
+
+<table>
+  <tbody id="offers">
+    <%= for offer <- @offers do %>
+      <tr id={"offer-#{offer.id}"}>
+        <td><%= "#{offer.origin} - #{offer.destination}" %></td>
+        <td>
+          <% naive_format = "#{DTUtils.naive_to_time(offer.departing_at)} - #{DTUtils.naive_to_time(offer.arriving_at)}"  %>
+          <%= if offer.departing_at.day == offer.arriving_at.day do 
+              naive_format
+            else
+              "#{naive_format}+#{offer.arriving_at.day - offer.departing_at.day}d"
+            end
+          %>
+        </td>
+        <td>
+          <%= DTUtils.minutes_to_time(offer.total_duration) %>
+        </td>
+        <%= case offer.segments_count do %>
+          <% 1 -> %>
+            <td><%= "Direct" %></td>
+          <% count -> %>
+            <td><%= "#{count - 1} stop" %></td>
+         <% end %>
+        <td><%= "£#{offer.total_amount}/pers" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <span><%= live_patch "Edit", to: Routes.offer_request_show_path(@socket, :edit, @offer_request), class: "button" %></span> |
 <span><%= live_redirect "Back", to: Routes.offer_request_index_path(@socket, :index) %></span>

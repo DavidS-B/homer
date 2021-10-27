@@ -30,15 +30,15 @@ defmodule HomerWeb.OfferRequestLiveTest do
     test "lists all offer_requests", %{conn: conn, offer_request: offer_request} do
       {:ok, _index_live, html} = live(conn, Routes.offer_request_index_path(conn, :index))
 
-      assert html =~ "Listing Offer requests"
+      assert html =~ "Listing offer requests"
       assert html =~ offer_request.destination
     end
 
     test "saves new offer_request", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.offer_request_index_path(conn, :index))
 
-      assert index_live |> element("a", "New Offer request") |> render_click() =~
-               "New Offer request"
+      assert index_live |> element("a", "New offer request") |> render_click() =~
+               "New offer request"
 
       assert_patch(index_live, Routes.offer_request_index_path(conn, :new))
 
@@ -56,26 +56,6 @@ defmodule HomerWeb.OfferRequestLiveTest do
       assert html =~ "ABV"
     end
 
-    test "updates offer_request in listing", %{conn: conn, offer_request: offer_request} do
-      {:ok, index_live, _html} = live(conn, Routes.offer_request_index_path(conn, :index))
-
-      assert index_live
-             |> element("#offer_request-#{offer_request.id} a", "Edit")
-             |> render_click() =~
-               "Edit Offer request"
-
-      assert_patch(index_live, Routes.offer_request_index_path(conn, :edit, offer_request))
-
-      {:ok, _, html} =
-        index_live
-        |> form("#offer_request-form", offer_request: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.offer_request_index_path(conn, :index))
-
-      assert html =~ "Offer request updated successfully"
-      assert html =~ "BBZ"
-    end
-
     test "deletes offer_request in listing", %{conn: conn, offer_request: offer_request} do
       {:ok, index_live, _html} = live(conn, Routes.offer_request_index_path(conn, :index))
 
@@ -90,11 +70,11 @@ defmodule HomerWeb.OfferRequestLiveTest do
   describe "Show" do
     setup [:create_offer_request]
 
-    test "displays offer_request", %{conn: conn, offer_request: offer_request} do
+    test "displays offers", %{conn: conn, offer_request: offer_request} do
       {:ok, _show_live, html} =
         live(conn, Routes.offer_request_show_path(conn, :show, offer_request))
 
-      assert html =~ "Show Offer request"
+      assert html =~ "Show offers"
       assert html =~ offer_request.destination
     end
 
@@ -106,7 +86,7 @@ defmodule HomerWeb.OfferRequestLiveTest do
       refute html =~ "total_duration"
 
       assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Offer request"
+               "Edit offer request"
 
       assert_patch(show_live, Routes.offer_request_show_path(conn, :edit, offer_request))
 

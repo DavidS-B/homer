@@ -21,7 +21,6 @@ defmodule HomerWeb.Router do
 
     live "/offer_requests", OfferRequestLive.Index, :index
     live "/offer_requests/new", OfferRequestLive.Index, :new
-    live "/offer_requests/:id/edit", OfferRequestLive.Index, :edit
 
     live "/offer_requests/:id", OfferRequestLive.Show, :show
     live "/offer_requests/:id/show/edit", OfferRequestLive.Show, :edit

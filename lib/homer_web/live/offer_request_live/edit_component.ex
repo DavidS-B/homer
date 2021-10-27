@@ -2,6 +2,12 @@ defmodule HomerWeb.OfferRequestLive.EditComponent do
   use HomerWeb, :live_component
 
   alias Homer.Search
+  alias Homer.Search.Server
+
+  @impl true
+  def mount(socket) do
+    {:ok, assign(socket, disabled: true)}
+  end
 
   @impl true
   def update(%{offer_request: offer_request} = assigns, socket) do
@@ -20,12 +26,18 @@ defmodule HomerWeb.OfferRequestLive.EditComponent do
       |> Search.change_offer_request(offer_request_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply,
+     socket
+     |> assign(:changeset, changeset)
+     |> assign(disabled: !changeset.valid?)
+     |> assign(disabled: Enum.empty?(changeset.changes))}
   end
 
   def handle_event("save", %{"offer_request" => offer_request_params}, socket) do
     case Search.update_offer_request(socket.assigns.offer_request, offer_request_params) do
-      {:ok, _offer_request} ->
+      {:ok, offer_request} ->
+        Server.offer_request_updated(self(), offer_request)
+
         {:noreply,
          socket
          |> put_flash(:info, "Offer request updated successfully")

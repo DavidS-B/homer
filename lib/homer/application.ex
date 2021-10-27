@@ -7,6 +7,12 @@ defmodule Homer.Application do
 
   @impl true
   def start(_type, _args) do
+    server_supervisor_config = [
+      strategy: :one_for_one,
+      max_seconds: 15,
+      name: Homer.ServerSupervisor
+    ]
+
     children = [
       # Start the Ecto repository
       Homer.Repo,
@@ -15,9 +21,11 @@ defmodule Homer.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Homer.PubSub},
       # Start the Endpoint (http/https)
-      HomerWeb.Endpoint
+      HomerWeb.Endpoint,
       # Start a worker by calling: Homer.Worker.start_link(arg)
       # {Homer.Worker, arg}
+      {Registry, keys: :unique, name: Homer.ServerRegistry},
+      {DynamicSupervisor, server_supervisor_config}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

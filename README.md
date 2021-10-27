@@ -1,19 +1,61 @@
 # Homer
+Clone this repo anywhere you want and move into the directory:
+```shell
+$ git clone https://github.com/DavidS-B/homer.git
+$ cd homer
+```
 
-To start your Phoenix server:
+## Running this app with Elixir
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+### Install PostgreSQL:
+https://www.postgresql.org/download/
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+:warning: For this project I used **PostgreSQL v12.8**
+### Install Elixir:
+https://elixir-lang.org/install.html
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+:warning: For this project I used **Elixir v1.12.3**, **Erlang/OTP 24.1.2** & **Phoenix v1.6.2**
 
-## Learn more
+### Build dependencies:
+```
+$ mix deps.get
+```
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+### DB set up:
+```
+$ mix ecto.setup
+```
+
+### Start Phoenix server:
+```
+$ mix phx.server
+```
+or with the interactive shell:
+```
+$ iex -S mix phx.server
+```
+
+### Run tests:
+```
+$ mix test
+```
+
+## Access to the application
+
+### Endpoint access to create an offer request:
+```
+http://localhost:4000/offer_requests
+```
+## Questions
+
+1) Given than in production we can have more than 5000 offers for one offer request. What persistence strategy do you suggest for offers ? Explain why.
+
+I suggest implementing a GenStage behaviour. It will provide back-pressure and dispatch data efficiently.
+
+We would create a GenStage Producer that will do all the needed API requests and a GenStage Consumer that will ask to the producer how many offers it needs, setting the min_demand and max_demand accordingly.
+
+
+2) We now want to deploy the app we just created on multiple servers that are connected together using distributed erlang. Which parts of the code will require an update and why ?
+
+We will have to create and implement an Erlang-based configuration file in order to run the app on a cluster of nodes.
+

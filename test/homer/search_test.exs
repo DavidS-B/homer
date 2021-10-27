@@ -27,7 +27,7 @@ defmodule Homer.SearchTest do
       assert Search.get_offer_request!(offer_request.id) == offer_request
     end
 
-    test "create_offer_request/1 with valid data creates a offer_request" do
+    test "create_offer_request/1 with valid data creates an offer_request" do
       valid_attrs = %{
         departure_date: ~D[2021-10-20],
         destination: "Muy",
@@ -113,9 +113,63 @@ defmodule Homer.SearchTest do
       assert_raise Ecto.NoResultsError, fn -> Search.get_offer_request!(offer_request.id) end
     end
 
-    test "change_offer_request/1 returns a offer_request changeset" do
+    test "change_offer_request/1 returns an offer_request changeset" do
       offer_request = offer_request_fixture()
       assert %Ecto.Changeset{} = Search.change_offer_request(offer_request)
+    end
+  end
+
+  describe "offer" do
+    alias Homer.Search.Offer
+
+    import Homer.SearchFixtures
+
+    @invalid_attrs %{
+      arriving_at: nil,
+      departing_at: nil,
+      destination: nil,
+      origin: nil,
+      segments_count: nil,
+      total_amount: nil,
+      total_duration: nil
+    }
+
+    test "create_offer/1 with valid data creates an offer" do
+      valid_attrs = %{
+        arriving_at: ~N[2023-10-21 04:00:07],
+        departing_at: ~N[2022-10-20 23:00:07],
+        destination: "AGA",
+        origin: "ZZZ",
+        segments_count: 7,
+        total_amount: 420.6,
+        total_duration: 120
+      }
+
+      assert {:ok, %Offer{} = offer} = Search.create_offer(valid_attrs)
+      assert offer.arriving_at == ~N[2023-10-21 04:00:07]
+      assert offer.departing_at == ~N[2022-10-20 23:00:07]
+      assert offer.destination == "AGA"
+      assert offer.origin == "ZZZ"
+      assert offer.segments_count == 7
+      assert offer.total_amount == Decimal.new("420.6")
+      assert offer.total_duration == 120
+    end
+
+    test "create_offer/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Search.create_offer(@invalid_attrs)
+    end
+
+    test "get_offers/2 returns a defined amount of offers corresponding to an offer_request" do
+      offer_request = offer_request_fixture()
+      Enum.map(1..12, fn _ -> offer_fixture() end)
+      assert length(Search.get_offers(offer_request, 7)) == 7
+    end
+
+    test "delete_offers/0 deletes all offers" do
+      offer_request = offer_request_fixture()
+      Enum.map(1..3, fn _ -> offer_fixture() end)
+      assert {3, nil} = Search.delete_offers()
+      assert length(Search.get_offers(offer_request, 7)) == 0
     end
   end
 end
